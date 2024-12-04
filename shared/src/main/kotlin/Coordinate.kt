@@ -126,3 +126,6 @@ enum class FourDirectionFlipped(private val direction: Coordinate) {
     RIGHT -> LEFT
   }
 }
+
+fun List<String>.transposeGrid(): List<String> =
+  first().indices.map { col -> joinToString(separator = "") { it[col].toString() } }
