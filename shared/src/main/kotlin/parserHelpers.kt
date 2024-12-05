@@ -1,8 +1,11 @@
+@file:Suppress("unused")
+
 import java.io.BufferedReader
 
-fun Sequence<String>.extractLongSequence() = map { it.splitSpaceSeperatedLongs() }
+fun Sequence<String>.extractLongSequence() = map { it.spaceSeperatedLongs() }
 
-fun String.splitSpaceSeperatedLongs() = split(" ").map { it.toLong() }
+fun String.spaceSeperatedLongs(deliminator: String = " ") = split(deliminator).map { it.toLong() }
+fun String.splitSeperatedInts(deliminator: String = " ") = split(deliminator).map { it.toInt() }
 
 fun <T> BufferedReader.toSpecializedCoordinateMap(converter: (Char) -> T): Map<Coordinate, T> =
   lineSequence().flatMapIndexed { y, line ->

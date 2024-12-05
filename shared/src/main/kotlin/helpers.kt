@@ -1,4 +1,6 @@
-import java.util.PriorityQueue
+@file:Suppress("unused")
+
+import java.util.*
 import kotlin.math.ceil
 
 /**
@@ -26,3 +28,9 @@ fun <T> priorityQueueOf(comparator: Comparator<T>, vararg args: T): PriorityQueu
 }
 
 fun Char.toIntValue() = code - '0'.code
+
+fun <T> MutableList<T>.swap(index1: Int, index2: Int) {
+  val toMove = get(index2)
+  set(index2, get(index1))
+  set(index1, toMove)
+}
