@@ -12,17 +12,7 @@ fun day08Part2(input: BufferedReader): Any {
   val map = input.toCoordinateMap()
   val antennas = map.filter { it.value != '.' }.map { it.key to it.value }.groupBy({ it.second }, { it.first })
   return antennas.generateAntiNodes { left, right, diff ->
-    val antiNodes = mutableListOf(left, right)
-    var nextLeft = (left + diff)
-    while (nextLeft in map) {
-      antiNodes.add(nextLeft)
-      nextLeft += diff
-    }
-    var nextRight = (right - diff)
-    while (nextRight in map) {
-      antiNodes.add(nextRight)
-      nextRight -= diff
-    }
-    antiNodes
+    generateSequence(left) { it + diff }.takeWhile { it in map }
+      .toList() + generateSequence(right) { it - diff }.takeWhile { it in map }.toList()
   }.toSet().size
 }
