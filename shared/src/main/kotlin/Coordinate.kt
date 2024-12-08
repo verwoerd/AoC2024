@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 import kotlin.math.abs
 
 /**
@@ -38,11 +40,11 @@ fun <V> Map<Coordinate, V>.yRange() = keys.minByOrNull { it.y }!!.y to keys.maxB
 
 fun <V> Map<Coordinate, V>.xRange() = keys.minByOrNull { it.x }!!.x to keys.maxByOrNull { it.x }!!.x
 
-fun <V> Map<Coordinate, V>.printMap(seperater: String = "", transform: (V?) -> CharSequence) {
+fun <V> Map<Coordinate, V>.printMap(seperater: String = "", transform: (V?, Coordinate) -> CharSequence) {
   val (xStart, xEnd) = xRange()
   val (yStart, yEnd) = yRange()
   println((yStart..yEnd).joinToString("\n") {y ->
-    (xStart..xEnd).joinToString(seperater) {x-> "${transform(get(Coordinate(x,y)))}" }
+    (xStart..xEnd).joinToString(seperater) { x -> "${transform(get(Coordinate(x, y)), Coordinate(x, y))}" }
   })
 }
 
