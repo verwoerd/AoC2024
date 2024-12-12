@@ -21,6 +21,7 @@ data class Coordinate(val x: Int, val y: Int) : Comparable<Coordinate> {
   infix fun plusY(i: Number): Coordinate = plus(Coordinate(0, i.toInt()))
   infix fun plusX(i: Number): Coordinate = plus(Coordinate(i.toInt(), 0))
   fun mod(other: Coordinate): Coordinate  = Coordinate(x.mod(other.x), y.mod(other.y))
+  fun toDirection() = FourDirections.entries.firstOrNull { it.direction == this }
 }
 
 
@@ -69,7 +70,7 @@ fun adjacentCircularCoordinates(origin: Coordinate) = sequenceOf(
 fun Coordinate.isInRange(start: Coordinate, endInclusive: Coordinate) =
   x >= start.x && y >= start.x && x <= endInclusive.x && y <= endInclusive.y
 
-enum class FourDirections(private val direction: Coordinate) {
+enum class FourDirections(val direction: Coordinate) {
   DOWN(Coordinate(0, -1)),
   UP(Coordinate(0, 1)),
   LEFT(Coordinate(-1, 0)),
