@@ -37,9 +37,11 @@ val manhattanOriginComparator = Comparator { a: Coordinate, b: Coordinate ->
   )
 }
 
-fun <V> Map<Coordinate, V>.yRange() = keys.minByOrNull { it.y }!!.y to keys.maxByOrNull { it.y }!!.y
+fun <V> Map<Coordinate, V>.yRange() = keys.yRange()
+fun Set<Coordinate>.yRange() = minByOrNull { it.y }!!.y to maxByOrNull { it.y }!!.y
 
-fun <V> Map<Coordinate, V>.xRange() = keys.minByOrNull { it.x }!!.x to keys.maxByOrNull { it.x }!!.x
+fun <V> Map<Coordinate, V>.xRange() = keys.xRange()
+fun Set<Coordinate>.xRange() = minByOrNull { it.x }!!.x to maxByOrNull { it.x }!!.x
 
 fun <V> Map<Coordinate, V>.printMap(seperater: String = "", transform: (V?, Coordinate) -> CharSequence) {
   val (xStart, xEnd) = xRange()
@@ -100,13 +102,16 @@ enum class FourDirections(val direction: Coordinate) {
   }
 }
 
-enum class FourDirectionFlipped(private val direction: Coordinate) {
+enum class FourDirectionFlipped(val direction: Coordinate) {
   DOWN(Coordinate(0, 1)),
   UP(Coordinate(0, -1)),
   LEFT(Coordinate(-1, 0)),
   RIGHT(Coordinate(1, 0));
 
   operator fun plus(other: Coordinate) = direction + other
+  operator fun plus(other: FourDirectionFlipped) = direction + other.direction
+  operator fun minus(other: Coordinate) = other - direction
+  operator fun times(other: Int) = direction * other
 
   fun turnLeft() = when (this) {
     UP -> LEFT
