@@ -19,14 +19,15 @@ data class Debugger(
   val program: List<Int>,
   val output: MutableList<Int> = mutableListOf(),
   var pc: Int = 0,
-  var debug: Boolean = false
+  var debug: Boolean = false,
+  var stopAtOutput: Boolean = false
 ) {
 
-  fun getComboOperand(literal: Int): Int = when (literal) {
-    0, 1, 2, 3 -> literal
-    4 -> a.toInt()
-    5 -> b.toInt()
-    6 -> c.toInt()
+  fun getComboOperand(literal: Int): Long = when (literal) {
+    0, 1, 2, 3 -> literal.toLong()
+    4 -> a
+    5 -> b
+    6 -> c
     else -> error("Invalid operand")
   }
 
@@ -37,7 +38,7 @@ data class Debugger(
     when (operand) {
       0 -> {
         val combo = getComboOperand(literal)
-        val result = a / (1 shl combo)
+        val result = a / (1 shl combo.toInt())
         if (debug) println("[$pc]adv $literal($combo): $a/(2^$combo) -> $result")
         a = result
         pc += 2
@@ -54,7 +55,7 @@ data class Debugger(
         val combo = getComboOperand(literal)
         val result = combo % 8
         if (debug) println("[$pc]bst $literal($combo): $combo % 8 -> $result")
-        b = result.toLong()
+        b = result
         pc += 2
       }
 
@@ -75,13 +76,13 @@ data class Debugger(
         val combo = getComboOperand(literal)
         val result = combo % 8
         if (debug) println("[$pc]out $literal($combo): $combo % 8 -> $result")
-        output += result
+        output += result.toInt()
         pc += 2
       }
 
       6 -> {
         val combo = getComboOperand(literal)
-        val result = a / (1 shl combo)
+        val result = a / (1 shl combo.toInt())
         if (debug) println("[$pc]bdv $literal($combo): $a/(2^$combo) -> $result")
         b = result
         pc += 2
@@ -89,7 +90,7 @@ data class Debugger(
 
       7 -> {
         val combo = getComboOperand(literal)
-        val result = a / (1 shl combo)
+        val result = a / (1 shl combo.toInt())
         if (debug) println("[$pc]cdv $literal($combo): $a/(2^$combo) -> $result")
         c = result
         pc += 2
@@ -98,8 +99,10 @@ data class Debugger(
   }
 
   fun execute() {
+    val outputSize = output.size
     while (pc + 1 < program.size) {
       runCurrentInstruction()
+      if (stopAtOutput && outputSize != output.size) return
       if (debug) println(
         "[$pc]a: $a, b: $b, c: $c, output: ${output.joinToString(separator = ",")}"
       )
