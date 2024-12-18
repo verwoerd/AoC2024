@@ -41,12 +41,17 @@ fun day18Part2(input: BufferedReader, x: Int = 70, y: Int = 70): Any {
     }
     return emptyList()
   }
-
-  var path = mazeTime[1]!!.findPath()
-  var problem = origin
-  while (path.isNotEmpty()) {
-    problem = bits.first { it in path }
-    path = mazeTime[bits.indexOf(problem) + 1]!!.findPath()
+  var current = bits.size shr 1
+  var low = 0
+  var high = bits.lastIndex
+  while (high < low) {
+    val result = mazeTime[current]!!.findPath()
+    if (result.isNotEmpty()) {
+      low = current + 1
+    } else {
+      high = current - 1
+    }
+    current = (high + low) shr 1
   }
-  return bits[bits.indexOf(problem)].let { "${it.x},${it.y}" }
+  return bits[current].let { "${it.x},${it.y}" }
 }
