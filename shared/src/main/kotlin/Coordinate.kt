@@ -79,6 +79,9 @@ enum class FourDirections(val direction: Coordinate) {
   RIGHT(Coordinate(1, 0));
 
   operator fun plus(other: Coordinate) = direction + other
+  operator fun plus(other: FourDirections) = direction + other.direction
+  operator fun minus(other: Coordinate) = other - direction
+  operator fun times(other: Int) = direction * other
 
   fun turnLeft() = when (this) {
     UP -> LEFT
