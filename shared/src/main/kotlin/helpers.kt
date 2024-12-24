@@ -12,6 +12,11 @@ fun Boolean.toInt() = when {
   else -> 0
 }
 
+fun Boolean.toLong() = when {
+  this -> 1L
+  else -> 0L
+}
+
 infix fun Long.ceilDivision(b: Number) = ceil(this / b.toDouble()).toLong()
 infix fun Int.ceilDivision(b: Number) = ceil(this / b.toDouble()).toInt()
 
